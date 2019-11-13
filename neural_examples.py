@@ -8,7 +8,10 @@ changedescripiton:
 '''
 
 '''
-the example of full connected layer
+the example of full connected 
+usage example:
+fl = FullconnectedLayer((128, 128), 100)
+tmp  = fl.compute(x)
 '''
 
 
@@ -31,11 +34,14 @@ class FullconnectedLayer:
         import numpy as np
         output = []
         for j in range(self.neural_num):
-            output.append(np.dot(self.W[j], x) + self.bias[j])
+            output.append(np.sum(self.W[j]*x) + self.bias[j])
         return output
 
 '''
 the example of convenlutaion network
+usage example:
+cl = ConvenlutionLayer((3, 3), 1, 1, (128, 128), 10)
+cl.compute(np.random.random((128, 128, 1)))
 '''
 
 
@@ -53,8 +59,8 @@ class ConvenlutionLayer:
         import numpy as np
 
         # 初始化参数
-        self.W = np.random.random(size=featuremap_shape + [input_channel] + [featuremap_count])
-        self.bias = np.random.random(size=featuremap_shape + [featuremap_count])
+        self.W = np.random.random(size=list(featuremap_shape) + [input_channel] + [featuremap_count])
+        self.bias = np.random.random(size=list(featuremap_shape) + [featuremap_count])
 
         # 初始化输出特征
         self.outputshape_w = int(input_shape[0]/strides)
@@ -78,7 +84,7 @@ class ConvenlutionLayer:
 
         # 对输入进行padding 采用 zero padding 的形式
         padding_example = np.zeros(shape=[self.input_shape[0] + self.featuremap_shape[0] - 1, self.input_shape[1] +
-                                          self.featuremap_shape[1] - 1, self.input_shape[2]])
+                                          self.featuremap_shape[1] - 1, self.input_channel])
         padding_example[:-(self.featuremap_shape[0]-1), (self.featuremap_shape[1]-1):, :] = x
 
         for i in range(self.featuremap_count):
